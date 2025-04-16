@@ -87,6 +87,47 @@
 </body>
 
   <head>
+     <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #1e1e2f;
+      color: #fff;
+      text-align: center;
+      padding: 40px;
+    }
+
+    .status-container {
+      background: #2c2f4a;
+      border-radius: 15px;
+      padding: 30px;
+      max-width: 400px;
+      margin: 0 auto;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      transition: transform 0.2s ease;
+    }
+
+    .status-container:hover {
+      transform: scale(1.02);
+    }
+
+    .status {
+      font-size: 1.3em;
+      margin-bottom: 10px;
+    }
+
+    .motd {
+      font-style: italic;
+      color: #ccc;
+    }
+
+    .online {
+      color: #4caf50;
+    }
+
+    .offline {
+      color: #f44336;
+    }
+  </style>
   <title>Minecraft Server Status</title>
 </head>
 <body>
