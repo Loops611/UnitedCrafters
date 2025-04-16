@@ -94,14 +94,17 @@
   <div id="server-status">Checking status...</div>
 
   <script>
-    fetch("https://mcstatus.io/status/java/unitedcrafters.online")
+    const proxyUrl = "https://corsproxy.io/?";
+    const targetUrl = encodeURIComponent("https://mcstatus.io/status/java/unitedcrafters.online");
+
+    fetch(proxyUrl + targetUrl)
       .then(response => response.json())
       .then(data => {
         if (!data.online) {
           document.getElementById("server-status").innerHTML = "🟥 Server is Offline";
         } else {
           const players = data.players ? `${data.players.online} / ${data.players.max}` : "Unknown";
-          const motd = data.motd.clean || "No MOTD";
+          const motd = data.motd?.clean || "No MOTD";
 
           document.getElementById("server-status").innerHTML = `
             🟩 Server is Online<br>
