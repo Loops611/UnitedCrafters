@@ -94,40 +94,80 @@
   <h2>Server Status</h2>
   <div id="status">Checking...</div>
 
+  <style>
+    body {
+      background-color: #1a1a1a;
+      color: #fff;
+      font-family: Arial, sans-serif;
+      padding: 2rem;
+      text-align: center;
+    }
+
+    .status-card {
+      background: #2c2f4a;
+      border-radius: 15px;
+      padding: 25px;
+      margin: auto;
+      max-width: 500px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .online {
+      color: #4caf50;
+    }
+
+    .offline {
+      color: #f44336;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>UnitedCrafters Server Status</h1>
+  <div class="status-card">
+    <div id="status">Checking server status...</div>
+    <div id="players"></div>
+    <div id="motd"></div>
+  </div>
+
   <script>
-  const serverIP = "unitedcrafters.online"; // your server IP or domain
+    const serverIP = "unitedcrafters.online";
 
-  // ✅ Use backticks here to enable ${} inside the URL
-  fetch(`https://api.mcsrvstat.us/2/${serverIP}`)
-    .then(response => response.json())
-    .then(data => {
-      const statusEl = document.getElementById("status");
-      const playersEl = document.getElementById("players");
-      const motdEl = document.getElementById("motd");
+    fetch(`https://api.mcsrvstat.us/2/${serverIP}`)
+      .then(response => response.json())
+      .then(data => {
+        const statusEl = document.getElementById("status");
+        const playersEl = document.getElementById("players");
+        const motdEl = document.getElementById("motd");
 
-      if (!data.online) {
-        statusEl.innerHTML = "🟥 Server is <span class='offline'>Offline</span>";
-      } else {
+        if (!data.online) {
+          statusEl.innerHTML = "🟥 Server is <span class='offline'>Offline</span>";
+          return;
+        }
+
         const playersOnline = data.players ? `${data.players.online} / ${data.players.max}` : "Unknown";
         const motd = data.motd && data.motd.clean ? data.motd.clean.join(" ") : "No MOTD";
 
         statusEl.innerHTML = "🟩 Server is <span class='online'>Online</span>";
-        playersEl.innerHTML = `Players: ${playersOnline}`;
+        playersEl.innerHTML = `<strong>Players Online:</strong> ${playersOnline}`;
 
-        // ✅ Properly formatted HTML with quotes and backticks
         if (data.players && data.players.list && data.players.list.length > 0) {
           const playerList = data.players.list.map(player => `<li>${player}</li>`).join('');
-          playersEl.innerHTML += `<br><strong>Online Players:</strong><ul>${playerList}</ul>`;
+          playersEl.innerHTML += `<ul>${playerList}</ul>`;
         }
 
-        motdEl.textContent = `MOTD: ${motd}`;
-      }
-    })
-    .catch(error => {
-      document.getElementById("status").innerHTML = "❌ Error retrieving server status.";
-      console.error(error);
-    });
-</script>
+        motdEl.innerHTML = `<strong>MOTD:</strong> ${motd}`;
+      })
+      .catch(error => {
+        document.getElementById("status").innerHTML = "❌ Error retrieving server status.";
+        console.error(error);
+      });
+  </script>
 
 </body>
 
