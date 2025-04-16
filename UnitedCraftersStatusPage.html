@@ -95,27 +95,38 @@
   <div id="status">Checking...</div>
 
   <script>
-    const serverIP = "unitedcrafters.online"; // replace with your IP or domain
+  const serverIP = "play.yourserver.com"; // replace with your server IP or domain
 
-    fetch(`https://api.mcsrvstat.us/2/${serverIP}`)
-      .then(response => response.json())
-      .then(data => {
-        if (!data.online) {
-          document.getElementById("status").innerHTML = "🟥 Server is Offline";
-        } else {
-          const players = data.players ? `${data.players.online}/${data.players.max}` : "Unknown";
-          document.getElementById("status").innerHTML = `
-            🟩 Server is Online<br>
-            Players: ${players}<br>
-            MOTD: ${data.motd.clean.join(" ")}
-          `;
+  fetch(`https://api.mcsrvstat.us/2/${serverIP}`)
+    .then(response => response.json())
+    .then(data => {
+      const statusEl = document.getElementById("status");
+      const playersEl = document.getElementById("players");
+      const motdEl = document.getElementById("motd");
+
+      if (!data.online) {
+        statusEl.innerHTML = "🟥 Server is <span class='offline'>Offline</span>";
+      } else {
+        const playersOnline = data.players ? `${data.players.online} / ${data.players.max}` : "Unknown";
+        const motd = data.motd && data.motd.clean ? data.motd.clean.join(" ") : "No MOTD";
+
+        statusEl.innerHTML = "🟩 Server is <span class='online'>Online</span>";
+        playersEl.innerHTML = `Players: ${playersOnline}`;
+
+        // Show player names if available
+        if (data.players && data.players.list && data.players.list.length > 0) {
+          const playerList = data.players.list.map(player => `<li>${player}</li>`).join('');
+          playersEl.innerHTML += `<br><strong>Online Players:</strong><ul>${playerList}</ul>`;
         }
-      })
-      .catch(error => {
-        document.getElementById("status").innerHTML = "❌ Error checking status";
-        console.error(error);
-      });
-  </script>
+
+        motdEl.textContent = `MOTD: ${motd}`;
+      }
+    })
+    .catch(error => {
+      document.getElementById("status").innerHTML = "❌ Error retrieving server status.";
+      console.error(error);
+    });
+</script>
 </body>
 
 <head>
