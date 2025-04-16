@@ -87,34 +87,31 @@
 </body>
 
   <head>
-  <title>UnitedCrafters Server Status</title>
+  <title>Minecraft Server Status</title>
 </head>
 <body>
-  <h2>UnitedCrafters Server Status</h2>
-  <div id="server-status">Checking status...</div>
+  <h2>Server Status</h2>
+  <div id="status">Checking...</div>
 
   <script>
-    const proxyUrl = "https://corsproxy.io/?";
-    const targetUrl = encodeURIComponent("https://mcstatus.io/status/java/unitedcrafters.online");
+    const serverIP = "unitedcrafters.online"; // replace with your IP or domain
 
-    fetch(proxyUrl + targetUrl)
+    fetch(`https://api.mcsrvstat.us/2/${serverIP}`)
       .then(response => response.json())
       .then(data => {
         if (!data.online) {
-          document.getElementById("server-status").innerHTML = "🟥 Server is Offline";
+          document.getElementById("status").innerHTML = "🟥 Server is Offline";
         } else {
-          const players = data.players ? `${data.players.online} / ${data.players.max}` : "Unknown";
-          const motd = data.motd?.clean || "No MOTD";
-
-          document.getElementById("server-status").innerHTML = `
+          const players = data.players ? `${data.players.online}/${data.players.max}` : "Unknown";
+          document.getElementById("status").innerHTML = `
             🟩 Server is Online<br>
             Players: ${players}<br>
-            MOTD: ${motd}
+            MOTD: ${data.motd.clean.join(" ")}
           `;
         }
       })
       .catch(error => {
-        document.getElementById("server-status").innerHTML = "❌ Error retrieving status";
+        document.getElementById("status").innerHTML = "❌ Error checking status";
         console.error(error);
       });
   </script>
