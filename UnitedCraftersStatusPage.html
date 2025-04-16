@@ -86,6 +86,37 @@
     </header>
 </body>
 
+   <head>
+  <title>Minecraft Server Status</title>
+</head>
+<body>
+  <h2>Server Status</h2>
+  <div id="status">Checking...</div>
+
+  <script>
+    const serverIP = "play.yourserver.com"; // replace with your IP or domain
+
+    fetch(`https://api.mcsrvstat.us/2/${serverIP}`)
+      .then(response => response.json())
+      .then(data => {
+        if (!data.online) {
+          document.getElementById("status").innerHTML = "🟥 Server is Offline";
+        } else {
+          const players = data.players ? `${data.players.online}/${data.players.max}` : "Unknown";
+          document.getElementById("status").innerHTML = `
+            🟩 Server is Online<br>
+            Players: ${players}<br>
+            MOTD: ${data.motd.clean.join(" ")}
+          `;
+        }
+      })
+      .catch(error => {
+        document.getElementById("status").innerHTML = "❌ Error checking status";
+        console.error(error);
+      });
+  </script>
+</body>
+
 
 <head>
     <style>
