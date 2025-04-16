@@ -95,8 +95,9 @@
   <div id="status">Checking...</div>
 
   <script>
-  const serverIP = "unitedcrafters.online"; // replace with your server IP or domain
+  const serverIP = "unitedcrafters.online"; // your server IP or domain
 
+  // ✅ Use backticks here to enable ${} inside the URL
   fetch(`https://api.mcsrvstat.us/2/${serverIP}`)
     .then(response => response.json())
     .then(data => {
@@ -113,7 +114,7 @@
         statusEl.innerHTML = "🟩 Server is <span class='online'>Online</span>";
         playersEl.innerHTML = `Players: ${playersOnline}`;
 
-        // Show player names if available
+        // ✅ Properly formatted HTML with quotes and backticks
         if (data.players && data.players.list && data.players.list.length > 0) {
           const playerList = data.players.list.map(player => `<li>${player}</li>`).join('');
           playersEl.innerHTML += `<br><strong>Online Players:</strong><ul>${playerList}</ul>`;
@@ -127,6 +128,7 @@
       console.error(error);
     });
 </script>
+
 </body>
 
 <head>
