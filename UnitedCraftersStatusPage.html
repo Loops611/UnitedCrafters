@@ -125,10 +125,14 @@
 <body>
 
   <h1>UnitedCrafters Server Status</h1>
+
   <div class="status-card">
     <div id="status">Checking server status...</div>
     <div id="players"></div>
     <div id="motd"></div>
+    <div id="ip"></div>
+    <div id="hostname"></div>
+    <div id="plugins"></div>
   </div>
 
   <script>
@@ -140,13 +144,16 @@
         const statusEl = document.getElementById("status");
         const playersEl = document.getElementById("players");
         const motdEl = document.getElementById("motd");
-        const pluginsList = document.getElementById("plugins");
+        const pluginsEl = document.getElementById("plugins");
+        const ipEl = document.getElementById("ip");
+        const hostnameEl = document.getElementById("hostname");
 
         if (!data.online) {
           statusEl.innerHTML = "🟥 Server is <span class='offline'>Offline</span>";
           return;
         }
 
+        // Status & MOTD
         const playersOnline = data.players ? `${data.players.online} / ${data.players.max}` : "Unknown";
         const motd = data.motd && data.motd.clean ? data.motd.clean.join(" ") : "No MOTD";
 
@@ -159,12 +166,25 @@
         }
 
         motdEl.innerHTML = `<strong>MOTD:</strong> ${motd}`;
+
+        // IP & Hostname
+        ipEl.innerHTML = `<strong>Server IP:</strong> ${data.ip || "Unavailable"}`;
+        hostnameEl.innerHTML = `<strong>Hostname:</strong> ${data.hostname || serverIP}`;
+
+        // Plugins
+        if (data.plugins && data.plugins.length > 0) {
+          const pluginList = data.plugins.map(plugin => `<li>${plugin}</li>`).join('');
+          pluginsEl.innerHTML = `<strong>Plugins:</strong><ul>${pluginList}</ul>`;
+        } else {
+          pluginsEl.innerHTML = `<strong>Plugins:</strong> Not listed or hidden`;
+        }
       })
       .catch(error => {
         document.getElementById("status").innerHTML = "❌ Error retrieving server status.";
         console.error(error);
       });
   </script>
+
    <br>
 
 </body>
