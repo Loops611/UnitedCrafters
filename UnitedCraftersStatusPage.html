@@ -168,14 +168,6 @@
         // IP & Hostname
         ipEl.innerHTML = `<strong>Server IP:</strong> ${data.ip || "Unavailable"}`;
         hostnameEl.innerHTML = `<strong>Hostname:</strong> ${data.hostname || serverIP}`;
-
-        // Plugins
-        if (data.plugins && data.plugins.length > 0) {
-          const pluginList = data.plugins.map(plugin => `<li>${plugin}</li>`).join('');
-          pluginsEl.innerHTML = `<strong>Plugins:</strong><ul>${pluginList}</ul>`;
-        } else {
-          pluginsEl.innerHTML = `<strong>Plugins:</strong> Not listed or hidden`;
-        }
       })
       .catch(error => {
         document.getElementById("status").innerHTML = "❌ Error retrieving server status.";
